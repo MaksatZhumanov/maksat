@@ -1227,6 +1227,22 @@
       return m ? m[1] : null;
     }
 
+    // Auto-load real YouTube thumbnails for every portfolio card that
+    // doesn't already have a hand-picked custom thumbnail (inline style).
+    document.querySelectorAll('.work-card').forEach(function(card){
+      var thumb = card.querySelector('.work-thumb');
+      if(!thumb || thumb.getAttribute('style')) return;
+      var id = getYouTubeId(card.getAttribute('data-href') || '');
+      if(!id) return;
+      var img = new Image();
+      img.onload = function(){
+        thumb.style.backgroundImage = "url('https://i.ytimg.com/vi/" + id + "/hqdefault.jpg')";
+        thumb.style.backgroundSize = 'cover';
+        thumb.style.backgroundPosition = 'center';
+      };
+      img.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    });
+
     var modal = document.getElementById('videoModal');
     var iframe = document.getElementById('videoModalIframe');
     var fallback = document.getElementById('videoModalFallback');
